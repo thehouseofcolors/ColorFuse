@@ -1,0 +1,4 @@
+repository "ColorFuse@Rengin_Celik@cloud"
+  path "/"
+    br "/main"
+    co "/main"
