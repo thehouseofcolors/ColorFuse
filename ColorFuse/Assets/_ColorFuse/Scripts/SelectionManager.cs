@@ -60,8 +60,15 @@ public class SelectionManager : Singleton<SelectionManager>
 
         var resultColor = colorA + colorB;
 
+            
+        // Undo kaydını birleştirmeden önce yap
+        bool willAddResult = resultColor.IsValidColor && !resultColor.IsWhite;
+        
+
         if (resultColor.IsWhite)
         {
+            UndoManager.Instance.RecordAction(new CombineTilesUndoAction(firstTile, secondTile, colorA, colorB, willAddResult));
+
             Debug.Log("Beyaz oluştu! İki taş silindi.");
             firstTile.PopTopColor();
             secondTile.PopTopColor();
@@ -69,8 +76,10 @@ public class SelectionManager : Singleton<SelectionManager>
             return;
         }
 
-        if (resultColor.IsValidColor)
+        if ((colorA + colorB).IsValidColor)
         {
+            UndoManager.Instance.RecordAction(new CombineTilesUndoAction(firstTile, secondTile, colorA, colorB, willAddResult));
+
             Debug.Log("Ara renk oluştu! İki taş silindi, ara renk son tıklanan taşta gösteriliyor.");
             firstTile.PopTopColor();
             secondTile.PopTopColor();
@@ -101,4 +110,6 @@ public class SelectionManager : Singleton<SelectionManager>
 
         Debug.Log("Seçimler temizlendi.");
     }
+
 }
+

@@ -45,28 +45,3 @@
 | `TileSpawner`                  | Grid üzerine tile'ları spawn eder, başlangıçta çağrılır.                         |
 | `TileManager` *(isteğe bağlı)* | Oyun boyunca tile’lar ile ilgili genel yönetimi yapar (örn. hepsi bitti mi vs.). |
 
-
-
-| Sınıf Adı            | Sorumlulukları / Görevleri                                           | Notlar / Bağlantılar                                                |
-| -------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| **Tile**             | - Her bir karo (tile) için renk yığını (stack) tutar.                | Renkleri gösterir, seçime cevap verir, renk günceller.              |
-|                      | - Renk yığınına renk ekleme/çıkarma (push/pop) işlemleri yapar.      | Inspector’da sprite veya materyalin rengini ayarlar.                |
-|                      | - Kendi koordinatlarını (X, Y) tutar.                                | GridManager tarafından set edilir.                                  |
-|                      | - Kullanıcı tıklaması ile SelectionManager’a bildirir.               |                                                                     |
-| -----------------    | -------------------------------------------------------------------- | -------------------------------------------------------             |
-| **GridManager**      | - Oyun alanını grid (2D dizi) olarak oluşturur.                      | Tile prefab’larını instantiate eder ve yerleştirir.                 |
-|                      | - Tüm tile’lara renk yığınlarını oluşturup atar.                     | Renklerin dengeli dağılımını sağlar.                                |
-| -----------------    | -------------------------------------------------------------------- | -------------------------------------------------------             |
-| **ColorDataSO**      | - Renk verilerini (R, G, B ve isim) ScriptableObject olarak tutar.   | Veri olarak renk bilgisi sağlar.                                    |
-|                      | - Unity’nin Color tipine dönüşüm fonksiyonu vardır.                  | ScriptableObject sayesinde düzenlenebilir.                          |
-| -----------------    | -------------------------------------------------------------------- | -------------------------------------------------------             |
-| **ColorManager**     | - Renk karışımı işlemlerini yapar (iki rengi toplama, kontrol).      | Base ve tüm renklerin listelerini tutar.                            |
-|                      | - Renklerin toplamının beyaz olup olmadığını kontrol eder.           | Singleton olarak tüm projeden erişilebilir.                         |
-|                      | - Rastgele temel renk seçer.                                         |                                                                     |
-| -----------------    | -------------------------------------------------------------------- | -------------------------------------------------------             |
-| **SelectionManager** | - Kullanıcının seçtiği tile’ları yönetir (en fazla 2).               | Singleton.                                                          |
-|                      | - İki tile seçildiğinde renk kombinasyonunu dener.                   | Başarılı ise renkleri günceller, başarısızsa seçimi temizler.       |
-| -----------------    | -------------------------------------------------------------------- | -------------------------------------------------------             |
-| **Singleton<T>**     | - Generic bir singleton sınıfıdır.                                   | Diğer sınıflar bu sınıftan türeyerek tek örnek (instance) kullanır. |
-
-

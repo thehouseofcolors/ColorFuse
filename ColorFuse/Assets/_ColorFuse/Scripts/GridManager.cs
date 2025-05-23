@@ -10,7 +10,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private float spacing = 1.1f;
 
-    private List<Tile> allTiles = new List<Tile>();
+    private List<Tile> allTiles = new List<Tile>(); 
 
     void Start()
     {
