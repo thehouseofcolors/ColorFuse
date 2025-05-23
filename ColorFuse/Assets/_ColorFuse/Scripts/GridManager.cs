@@ -1,25 +1,25 @@
 using UnityEngine;
-
+using System.Collections.Generic;
+using System.Linq;
 
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private int width = 3;
     [SerializeField] private int height = 3;
+    [SerializeField] private int stackSizePerTile = 3;
+    [SerializeField] private Tile tilePrefab;
     [SerializeField] private float spacing = 1.1f;
-    [SerializeField] private GameObject tilePrefab;
 
-    private GameObject[,] grid;
+    private List<Tile> allTiles = new List<Tile>();
 
     void Start()
     {
         GenerateGrid();
+        GenerateAndAssignColors();
     }
 
     void GenerateGrid()
     {
-        grid = new GameObject[width, height];
-
-        // Gridin merkezini hesapla
         float gridWidth = (width - 1) * spacing;
         float gridHeight = (height - 1) * spacing;
         Vector2 offset = new Vector2(gridWidth, gridHeight) / 2f;
@@ -28,27 +28,80 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Vector2 position = new Vector2(x * spacing, y * spacing);
-                position -= offset; // Ortalamak için offset uygula
+                Vector2 position = new Vector2(x * spacing, y * spacing) - offset;
+                GameObject tileGO = Instantiate(tilePrefab.gameObject, position, Quaternion.identity, transform);
+                tileGO.name = $"Tile {x},{y}";
 
-                GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity, transform);
-                grid[x, y] = tile;
-
-                var tileComponent = tile.GetComponent<Tile>();
-                if (tileComponent != null)
-                {
-                    tileComponent.SetCoordinates(x, y);
-                    tileComponent.SetColor(GetRandomColor());
-                }
+                Tile tile = tileGO.GetComponent<Tile>();
+                tile.SetCoordinates(x, y);
+                allTiles.Add(tile);
             }
         }
     }
 
-    TileColor GetRandomColor()
+    void GenerateAndAssignColors()
     {
-        int colorCount = System.Enum.GetValues(typeof(TileColor)).Length;
-        return (TileColor)Random.Range(0, colorCount);
+        int totalTileCount = width * height;
+        int totalColorCount = totalTileCount * stackSizePerTile;
+
+        List<ColorVector> allColors = new List<ColorVector>();
+
+        // Tanımlı 6 ana rengi oluştur
+        ColorVector[] baseColors = new ColorVector[]
+        {
+            new ColorVector(1, 0, 0), // Kırmızı
+            new ColorVector(0, 1, 0), // Yeşil
+            new ColorVector(0, 0, 1), // Mavi
+            new ColorVector(1, 1, 0), // Sarı
+            new ColorVector(0, 1, 1), // Camgöbeği
+            new ColorVector(1, 0, 1)  // Magenta
+        };
+
+        int countPerColor = totalColorCount / baseColors.Length;
+
+        for (int i = 0; i < baseColors.Length; i++)
+        {
+            for (int j = 0; j < countPerColor; j++)
+            {
+                allColors.Add(baseColors[i]);
+            }
+        }
+
+        // Eksik varsa doldur (tam bölünmemişse)
+        while (allColors.Count < totalColorCount)
+        {
+            allColors.Add(baseColors[Random.Range(0, baseColors.Length)]);
+        }
+
+        // Renkleri karıştır
+        Shuffle(allColors);
+
+
+        // Renkleri tile'lara sırayla dağıt
+        int index = 0;
+        foreach (var tile in allTiles)
+        {
+            List<ColorVector> colorsForTile = new List<ColorVector>();
+            for (int i = 0; i < stackSizePerTile; i++)
+            {
+                colorsForTile.Add(allColors[index++]);
+            }
+
+            tile.SetColors(colorsForTile);
+        }
     }
+
+    public static void Shuffle<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
+        }
+    }
+
 
 }
 

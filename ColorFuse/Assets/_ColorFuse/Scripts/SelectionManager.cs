@@ -1,79 +1,104 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectionManager : MonoBehaviour
+public class SelectionManager : Singleton<SelectionManager>
 {
-    [SerializeField] private Color highlightColor = Color.white;
-
-    private List<Tile> selectedTiles = new();
+    private Tile firstTile;
+    private Tile secondTile;
+    private bool isFirstSelected = false;
+    private bool isSecondSelected = false;
 
     public void SelectTile(Tile tile)
     {
-        if (selectedTiles.Contains(tile))
+        // Aynı tile tekrar seçildiyse kaldır
+        if (isFirstSelected && firstTile == tile)
         {
-            // Zaten seçiliyse bırak
             tile.SetHighlight(false);
-            selectedTiles.Remove(tile);
+            firstTile = null;
+            isFirstSelected = false;
+            Debug.Log("İlk seçim iptal edildi.");
             return;
         }
 
-        if (selectedTiles.Count >= 2)
+        if (isSecondSelected && secondTile == tile)
         {
-            Debug.Log("En fazla 2 taş seçilebilir.");
+            tile.SetHighlight(false);
+            secondTile = null;
+            isSecondSelected = false;
+            Debug.Log("İkinci seçim iptal edildi.");
             return;
         }
 
-        selectedTiles.Add(tile);
-        tile.SetHighlight(true);
-
-        if (selectedTiles.Count == 2)
+        // Boş slot bul ve ekle
+        if (!isFirstSelected)
         {
+            firstTile = tile;
+            isFirstSelected = true;
+            tile.SetHighlight(true);
+            Debug.Log("İlk tile seçildi.");
+        }
+        else if (!isSecondSelected)
+        {
+            secondTile = tile;
+            isSecondSelected = true;
+            tile.SetHighlight(true);
+            Debug.Log("İkinci tile seçildi, birleştirme deneniyor.");
             TryCombineTiles();
         }
     }
 
     void TryCombineTiles()
     {
-        var tileA = selectedTiles[0];
-        var tileB = selectedTiles[1];
+        var colorA = firstTile.PeekColor();
+        var colorB = secondTile.PeekColor();
 
-        if (CanCombine(tileA.tileColor, tileB.tileColor, out TileColor resultColor))
+        if (colorA.Equals(new ColorVector(0, 0, 0)) || colorB.Equals(new ColorVector(0, 0, 0)))
         {
-            tileA.SetColor(resultColor);
-            Destroy(tileB.gameObject);
-            selectedTiles.Clear();
+            Debug.Log("Seçilen taşlardan en az birinde renk yok.");
+            ClearSelection();
+            return;
         }
-        else
-        {
-            Debug.Log("Geçersiz kombinasyon!");
-            // Buraya animasyon/efekt çağırabilirsin
-            foreach (var tile in selectedTiles)
-                tile.SetHighlight(false);
 
-            selectedTiles.Clear();
+        var resultColor = colorA + colorB;
+
+        if (resultColor.IsWhite)
+        {
+            Debug.Log("Beyaz oluştu! İki taş silindi.");
+            firstTile.PopTopColor();
+            secondTile.PopTopColor();
+            ClearSelection();
+            return;
         }
+
+        if (resultColor.IsValidColor)
+        {
+            Debug.Log("Ara renk oluştu! İki taş silindi, ara renk son tıklanan taşta gösteriliyor.");
+            firstTile.PopTopColor();
+            secondTile.PopTopColor();
+            secondTile.PushColor(resultColor); // Son tıklanan tile'da göster
+            ClearSelection();
+            return;
+        }
+
+        Debug.Log("Geçersiz kombinasyon, hiçbir şey yapılmadı.");
+        ClearSelection();
     }
 
-    bool CanCombine(TileColor a, TileColor b, out TileColor result)
+    void ClearSelection()
     {
-        result = TileColor.Red; // Varsayılan
-        // Basit örnek kurallar:
-        if ((a == TileColor.Red && b == TileColor.Blue) || (a == TileColor.Blue && b == TileColor.Red))
+        if (isFirstSelected)
         {
-            result = TileColor.Purple;
-            return true;
-        }
-        if ((a == TileColor.Red && b == TileColor.Yellow) || (a == TileColor.Yellow && b == TileColor.Red))
-        {
-            result = TileColor.Orange;
-            return true;
-        }
-        if ((a == TileColor.Blue && b == TileColor.Yellow) || (a == TileColor.Yellow && b == TileColor.Blue))
-        {
-            result = TileColor.Green;
-            return true;
+            firstTile.SetHighlight(false);
+            firstTile = null;
+            isFirstSelected = false;
         }
 
-        return false;
+        if (isSecondSelected)
+        {
+            secondTile.SetHighlight(false);
+            secondTile = null;
+            isSecondSelected = false;
+        }
+
+        Debug.Log("Seçimler temizlendi.");
     }
 }
