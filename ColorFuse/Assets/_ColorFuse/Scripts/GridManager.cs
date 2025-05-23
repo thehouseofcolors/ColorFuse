@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GridManager : MonoBehaviour
+public class GridManager : Singleton<GridManager>
 {
     [SerializeField] private int width = 3;
     [SerializeField] private int height = 3;
@@ -100,6 +100,39 @@ public class GridManager : MonoBehaviour
             list[i] = list[j];
             list[j] = temp;
         }
+    }
+
+    public void RedistributeColors()
+    {
+        List<ColorVector> allColors = new();
+
+        // Tüm renkleri topla
+        foreach (var tile in allTiles)
+        {
+            while (tile.HasColors())
+            {
+                allColors.Add(tile.PopTopColor());
+            }
+        }
+
+        Shuffle(allColors);
+
+        // Yeniden dağıt
+        int index = 0;
+        foreach (var tile in allTiles)
+        {
+            for (int i = 0; i < stackSizePerTile && index < allColors.Count; i++)
+            {
+                tile.PushColor(allColors[index]);
+                index++;
+            }
+        }
+        
+        foreach (var tile in allTiles)
+        {
+            tile.UpdateVisual();
+        }
+        
     }
 
 

@@ -53,7 +53,7 @@ public class Tile : MonoBehaviour
     void OnMouseDown()
     {
         SelectionManager.Instance.SelectTile(this);
-        
+
     }
 
     public void SetColors(List<ColorVector> colors)
@@ -86,20 +86,26 @@ public class Tile : MonoBehaviour
         return ColorStack.Count > 0 ? ColorStack.Peek() : new ColorVector(0, 0, 0);
     }
 
-    private void UpdateVisual()
+    public void UpdateVisual()
     {
         if (ColorStack.Count > 0)
         {
             spriteRenderer.color = ColorStack.Peek().ToUnityColor();
         }
-        else
-        {
-            gameObject.SetActive(false); // ya da spriteRenderer.color = Color.black;
-        }
+        // else
+        // {
+        //     gameObject.SetActive(false); // ya da spriteRenderer.color = Color.black;
+        // }
     }
 
     public void SetHighlight(bool on)
     {
         transform.localScale = on ? Vector3.one * 1.2f : Vector3.one;
     }
+
+    public bool HasColors()
+    {
+        return ColorStack.Count > 0;
+    }
+
 }
