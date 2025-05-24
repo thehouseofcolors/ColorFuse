@@ -1,24 +1,43 @@
-using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 public class GridManager : Singleton<GridManager>
 {
-    [SerializeField] private int width = 3;
-    [SerializeField] private int height = 3;
-    [SerializeField] private int stackSizePerTile = 3;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private float spacing = 1.1f;
 
-    private List<Tile> allTiles = new List<Tile>(); 
+    private List<Tile> allTiles = new List<Tile>();
 
-    void Start()
+    private int width;
+    private int height;
+    private int stackSizePerTile;
+    private int baseColorCount;
+    private int mixedColorCount;
+
+    public void SetupGrid(GridConfig config)
     {
+        width = config.columns;
+        height = config.rows;
+        baseColorCount = config.baseColorCount;
+        mixedColorCount = config.mixedColorCount;
+        stackSizePerTile = baseColorCount + mixedColorCount;
+
+        ClearGrid();
         GenerateGrid();
         GenerateAndAssignColors();
     }
 
-    void GenerateGrid()
+    private void ClearGrid()
+    {
+        foreach (var tile in allTiles)
+        {
+            if (tile != null)
+                Destroy(tile.gameObject);
+        }
+        allTiles.Clear();
+    }
+
+    private void GenerateGrid()
     {
         float gridWidth = (width - 1) * spacing;
         float gridHeight = (height - 1) * spacing;
@@ -39,23 +58,15 @@ public class GridManager : Singleton<GridManager>
         }
     }
 
-    void GenerateAndAssignColors()
+    private void GenerateAndAssignColors()
     {
         int totalTileCount = width * height;
         int totalColorCount = totalTileCount * stackSizePerTile;
 
         List<ColorVector> allColors = new List<ColorVector>();
 
-        // Tanımlı 6 ana rengi oluştur
-        ColorVector[] baseColors = new ColorVector[]
-        {
-            new ColorVector(1, 0, 0), // Kırmızı
-            new ColorVector(0, 1, 0), // Yeşil
-            new ColorVector(0, 0, 1), // Mavi
-            new ColorVector(1, 1, 0), // Sarı
-            new ColorVector(0, 1, 1), // Camgöbeği
-            new ColorVector(1, 0, 1)  // Magenta
-        };
+        // baseColorCount kadar ana renk dizisi oluştur
+        ColorVector[] baseColors = GenerateBaseColors(baseColorCount);
 
         int countPerColor = totalColorCount / baseColors.Length;
 
@@ -67,17 +78,14 @@ public class GridManager : Singleton<GridManager>
             }
         }
 
-        // Eksik varsa doldur (tam bölünmemişse)
+        // Eksik renkleri doldur (tam bölünmemişse)
         while (allColors.Count < totalColorCount)
         {
             allColors.Add(baseColors[Random.Range(0, baseColors.Length)]);
         }
 
-        // Renkleri karıştır
         Shuffle(allColors);
 
-
-        // Renkleri tile'lara sırayla dağıt
         int index = 0;
         foreach (var tile in allTiles)
         {
@@ -86,9 +94,30 @@ public class GridManager : Singleton<GridManager>
             {
                 colorsForTile.Add(allColors[index++]);
             }
-
             tile.SetColors(colorsForTile);
         }
+    }
+
+    private ColorVector[] GenerateBaseColors(int count)
+    {
+        // İstersen farklı sayıda ana renk desteklemek için bu metodu genişletebilirsin
+        // Şimdilik 6'ya kadar destekliyoruz.
+        ColorVector[] colors6 = new ColorVector[]
+        {
+            new ColorVector(1, 0, 0), // Kırmızı
+            new ColorVector(0, 1, 0), // Yeşil
+            new ColorVector(0, 0, 1), // Mavi
+            new ColorVector(1, 1, 0), // Sarı
+            new ColorVector(0, 1, 1), // Camgöbeği
+            new ColorVector(1, 0, 1)  // Magenta
+        };
+
+        if (count <= 0) return new ColorVector[0];
+        if (count >= colors6.Length) return colors6;
+
+        ColorVector[] result = new ColorVector[count];
+        System.Array.Copy(colors6, result, count);
+        return result;
     }
 
     public static void Shuffle<T>(List<T> list)
@@ -104,9 +133,8 @@ public class GridManager : Singleton<GridManager>
 
     public void RedistributeColors()
     {
-        List<ColorVector> allColors = new();
+        List<ColorVector> allColors = new List<ColorVector>();
 
-        // Tüm renkleri topla
         foreach (var tile in allTiles)
         {
             while (tile.HasColors())
@@ -117,7 +145,6 @@ public class GridManager : Singleton<GridManager>
 
         Shuffle(allColors);
 
-        // Yeniden dağıt
         int index = 0;
         foreach (var tile in allTiles)
         {
@@ -126,16 +153,7 @@ public class GridManager : Singleton<GridManager>
                 tile.PushColor(allColors[index]);
                 index++;
             }
-        }
-        
-        foreach (var tile in allTiles)
-        {
             tile.UpdateVisual();
         }
-        
     }
-
-
 }
-
-
