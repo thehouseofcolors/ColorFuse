@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
-    readonly string CurrentLevelKey = "CurrentLevel";
+    public static string CurrentLevelKey = "CurrentLevel";
     readonly string TimeRecordKey = "TimeRecord";
 
-    int currentLevel;
+    public int currentLevel;
 
     void Start()
     {
