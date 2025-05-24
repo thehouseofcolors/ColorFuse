@@ -3,24 +3,22 @@ using UnityEngine;
 
 public class GridManager : Singleton<GridManager>
 {
+    [SerializeField] private LevelDatabase levelDatabase;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private float spacing = 1.1f;
 
     private List<Tile> allTiles = new List<Tile>();
 
-    private int width;
-    private int height;
+    
     private int stackSizePerTile;
-    private int baseColorCount;
-    private int mixedColorCount;
 
-    public void SetupGrid(GridConfig config)
+    GridConfig gridConfig;
+
+    public void SetupGrid(int level)
     {
-        width = config.columns;
-        height = config.rows;
-        baseColorCount = config.baseColorCount;
-        mixedColorCount = config.mixedColorCount;
-        stackSizePerTile = baseColorCount + mixedColorCount;
+
+        gridConfig = levelDatabase.GetGridConfig(level);
+        stackSizePerTile = gridConfig.baseColorCount + gridConfig.mixedColorCount;
 
         ClearGrid();
         GenerateGrid();
@@ -39,13 +37,13 @@ public class GridManager : Singleton<GridManager>
 
     private void GenerateGrid()
     {
-        float gridWidth = (width - 1) * spacing;
-        float gridHeight = (height - 1) * spacing;
+        float gridWidth = (gridConfig.columns - 1) * spacing;
+        float gridHeight = (gridConfig.rows - 1) * spacing;
         Vector2 offset = new Vector2(gridWidth, gridHeight) / 2f;
 
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < gridConfig.columns; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < gridConfig.rows ; y++)
             {
                 Vector2 position = new Vector2(x * spacing, y * spacing) - offset;
                 GameObject tileGO = Instantiate(tilePrefab.gameObject, position, Quaternion.identity, transform);
@@ -60,13 +58,13 @@ public class GridManager : Singleton<GridManager>
 
     private void GenerateAndAssignColors()
     {
-        int totalTileCount = width * height;
+        int totalTileCount = gridConfig.columns * gridConfig.rows;
         int totalColorCount = totalTileCount * stackSizePerTile;
 
         List<ColorVector> allColors = new List<ColorVector>();
 
         // baseColorCount kadar ana renk dizisi oluştur
-        ColorVector[] baseColors = GenerateBaseColors(baseColorCount);
+        ColorVector[] baseColors = GenerateBaseColors(gridConfig.baseColorCount);
 
         int countPerColor = totalColorCount / baseColors.Length;
 
@@ -156,4 +154,29 @@ public class GridManager : Singleton<GridManager>
             tile.UpdateVisual();
         }
     }
+
+
+    
+
+    
+    private void OnLevelCompleted(LevelCompletedEvent evt)
+    {
+        Debug.Log($"Level {evt.TimeRecord} completed!");
+    }
+    private void OnEnable()
+    {
+        EventBus.Subscribe<LevelStartedEvent>(OnLevelStarted);
+    }
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<LevelStartedEvent>(OnLevelStarted);
+    }
+
+    
+    private void OnLevelStarted(LevelStartedEvent evt)
+    {
+        SetupGrid(evt.LevelNumber); // doğru olan bu
+}
+
+
 }

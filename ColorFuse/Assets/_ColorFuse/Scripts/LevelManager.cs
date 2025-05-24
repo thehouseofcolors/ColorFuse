@@ -1,14 +1,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class LevelManager : MonoBehaviour
 {
-    public LevelDatabase levelDatabase;
-    int currentLevel;
     readonly string CurrentLevelKey = "CurrentLevel";
     readonly string TimeRecordKey = "TimeRecord";
-    Dictionary<int, LevelConfig> LevelRecords;
-    
-    
-    
+
+    int currentLevel;
+
+    void Start()
+    {
+        currentLevel = PlayerPrefs.GetInt(CurrentLevelKey, 1);
+        EventBus.Publish(new LevelStartedEvent(currentLevel));
+
+    }
+
+    public void CompleteLevel(int time, bool isSuccess)
+    {
+        // Kaydet
+        PlayerPrefs.SetInt(TimeRecordKey + currentLevel, time);
+        if (isSuccess)
+            PlayerPrefs.SetInt(CurrentLevelKey, currentLevel + 1);
+        PlayerPrefs.Save();
+
+        // Event fırlat
+        EventBus.Publish(new LevelCompletedEvent(currentLevel, time, isSuccess));
+    }
 }

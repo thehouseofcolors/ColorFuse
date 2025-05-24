@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5abbe6ddee462c846be17bcaee970a07, type: 3}
   m_Name: LevelDatabase
   m_EditorClassIdentifier: 
-  levels: []
+  configs:
+  - gridConfig:
+      rows: 2
+      columns: 2
+      baseColorCount: 3
+      mixedColorCount: 0
+    time: 0
+    level: 1
