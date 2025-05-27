@@ -6,12 +6,11 @@ public class UIManager : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject levelPanel;
     public GameObject winPanel;
-    public GameObject failPanel;
 
     private void Start()
     {
-        Debug.Log("UIManager started, showing Main Menu");
-        ShowMainMenu();
+        Debug.Log("UIManager started, showing Main Menu" + PlayerPrefs.GetInt(LevelManager.CurrentLevelKey, 1) + "level");
+        SetActivePanel(mainMenuPanel);
     }
 
     private void OnEnable()
@@ -29,48 +28,24 @@ public class UIManager : MonoBehaviour
     private void OnLevelStarted(LevelStartedEvent evt)
     {
         Debug.Log($"LevelStartedEvent received for Level {evt.LevelNumber}");
-        ShowLevelPanel();
+        SetActivePanel(levelPanel);
     }
 
     private void OnLevelCompleted(LevelCompletedEvent evt)
     {
-        Debug.Log($"LevelCompletedEvent received. Success: {evt.isSccessfull}, Level: {evt.LevelNumber}");
-        if (evt.isSccessfull)
-            ShowWinPanel();
-        else
-            ShowFailPanel();
-    }
-
-    public void ShowMainMenu()
-    {
-        Debug.Log("Showing Main Menu");
-        SetActivePanel(mainMenuPanel);
-    }
-
-    public void ShowLevelPanel()
-    {
-        Debug.Log("Showing Level Panel");
-        SetActivePanel(levelPanel);
-    }
-
-    public void ShowWinPanel()
-    {
-        Debug.Log("Showing Win Panel");
+        Debug.Log($"LevelCompletedEvent received. Success:  Level: {evt.LevelNumber}");
         SetActivePanel(winPanel);
     }
 
-    public void ShowFailPanel()
-    {
-        Debug.Log("Showing Fail Panel");
-        SetActivePanel(failPanel);
-    }
+
+
+
 
     private void SetActivePanel(GameObject activePanel)
     {
         mainMenuPanel.SetActive(false);
         levelPanel.SetActive(false);
         winPanel.SetActive(false);
-        failPanel.SetActive(false);
 
         if (activePanel != null)
             activePanel.SetActive(true);
@@ -80,7 +55,7 @@ public class UIManager : MonoBehaviour
     public void OnStartButtonPressed()
     {
         Debug.Log("Start button pressed");
-        EventBus.Publish(new LevelStartedEvent(1)); // 1. seviye örnek
+        EventBus.Publish(new LevelStartedEvent(PlayerPrefs.GetInt(LevelManager.CurrentLevelKey, 1))); // 1. seviye örnek
     }
 
     public void OnRetryButtonPressed()
@@ -93,12 +68,14 @@ public class UIManager : MonoBehaviour
     {
         Debug.Log("Next button pressed");
         int nextLevel = LevelManager.Instance.currentLevel + 1;
-        EventBus.Publish(new LevelStartedEvent(nextLevel));
+        PlayerPrefs.SetInt(LevelManager.CurrentLevelKey, nextLevel);PlayerPrefs.Save();
+        EventBus.Publish(new LevelStartedEvent(PlayerPrefs.GetInt(LevelManager.CurrentLevelKey)));
     }
 
     public void OnMenuButtonPressed()
     {
         Debug.Log("Menu button pressed");
-        ShowMainMenu();
+        SetActivePanel(mainMenuPanel);
     }
+
 }

@@ -9,22 +9,10 @@ public class SelectionManager : Singleton<SelectionManager>
 
     public void SelectTile(Tile tile)
     {
-        // Aynı tile tekrar seçildiyse kaldır
-        if (isFirstSelected && firstTile == tile)
+        // Aynı tile ikinci kez seçilmesin
+        if (tile == firstTile || tile == secondTile)
         {
-            tile.SetHighlight(false);
-            firstTile = null;
-            isFirstSelected = false;
-            Debug.Log("İlk seçim iptal edildi.");
-            return;
-        }
-
-        if (isSecondSelected && secondTile == tile)
-        {
-            tile.SetHighlight(false);
-            secondTile = null;
-            isSecondSelected = false;
-            Debug.Log("İkinci seçim iptal edildi.");
+            Debug.LogWarning("Bu tile zaten seçili.");
             return;
         }
 
@@ -51,44 +39,39 @@ public class SelectionManager : Singleton<SelectionManager>
         var colorA = firstTile.PeekColor();
         var colorB = secondTile.PeekColor();
 
-        if (colorA.Equals(new ColorVector(0, 0, 0)) || colorB.Equals(new ColorVector(0, 0, 0)))
-        {
-            Debug.Log("Seçilen taşlardan en az birinde renk yok.");
-            ClearSelection();
-            return;
-        }
 
         var resultColor = colorA + colorB;
+        bool willAddResult = resultColor.IsValidColor;
 
-            
-        // Undo kaydını birleştirmeden önce yap
-        bool willAddResult = resultColor.IsValidColor && !resultColor.IsWhite;
-        
+        UndoManager.Instance.RecordAction(new CombineTilesUndoAction(firstTile, secondTile, colorA, colorB, willAddResult));
 
         if (resultColor.IsWhite)
         {
-            UndoManager.Instance.RecordAction(new CombineTilesUndoAction(firstTile, secondTile, colorA, colorB, willAddResult));
-
             Debug.Log("Beyaz oluştu! İki taş silindi.");
             firstTile.PopTopColor();
             secondTile.PopTopColor();
-            ClearSelection();
-            return;
+
+            EventBus.Publish(new TileStateChangedEvent());  
+            EventBus.Publish(new WhiteColorFormedEvent(secondTile));
         }
-
-        if ((colorA + colorB).IsValidColor)
+        else if (resultColor.IsValidColor)
         {
-            UndoManager.Instance.RecordAction(new CombineTilesUndoAction(firstTile, secondTile, colorA, colorB, willAddResult));
-
             Debug.Log("Ara renk oluştu! İki taş silindi, ara renk son tıklanan taşta gösteriliyor.");
             firstTile.PopTopColor();
             secondTile.PopTopColor();
-            secondTile.PushColor(resultColor); // Son tıklanan tile'da göster
-            ClearSelection();
-            return;
+            secondTile.PushColor(resultColor);
+
+            EventBus.Publish(new TileStateChangedEvent());
+            EventBus.Publish(new ColorCombinedEvent(firstTile, secondTile, resultColor));
+        }
+        else
+        {
+            
+            EventBus.Publish(new TileStateChangedEvent());
+            Debug.Log("Geçersiz kombinasyon, hiçbir şey yapılmadı.");
+            EventBus.Publish(new InvalidCombineEvent(firstTile, secondTile));
         }
 
-        Debug.Log("Geçersiz kombinasyon, hiçbir şey yapılmadı.");
         ClearSelection();
     }
 
@@ -110,6 +93,4 @@ public class SelectionManager : Singleton<SelectionManager>
 
         Debug.Log("Seçimler temizlendi.");
     }
-
 }
-

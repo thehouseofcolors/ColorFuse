@@ -45,10 +45,11 @@ public class Tile : MonoBehaviour
     public Stack<ColorVector> ColorStack { get; private set; } = new Stack<ColorVector>();
 
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] GameObject gameObject;
+   
 
     public int X { get; private set; }
     public int Y { get; private set; }
+    
 
     void OnMouseDown()
     {
@@ -56,11 +57,11 @@ public class Tile : MonoBehaviour
 
     }
 
-    public void SetColors(List<ColorVector> colors)
-    {
-        ColorStack = new Stack<ColorVector>(colors);
-        UpdateVisual();
-    }
+    // public void SetColors(List<ColorVector> colors)
+    // {
+    //     ColorStack = new Stack<ColorVector>(colors);
+    //     UpdateVisual();
+    // }
 
     public void SetCoordinates(int x, int y)
     {
@@ -71,6 +72,8 @@ public class Tile : MonoBehaviour
     public ColorVector PopTopColor()
     {
         var color = ColorStack.Pop();
+        
+
         UpdateVisual();
         return color;
     }
@@ -85,18 +88,20 @@ public class Tile : MonoBehaviour
     {
         return ColorStack.Count > 0 ? ColorStack.Peek() : new ColorVector(0, 0, 0);
     }
-
     public void UpdateVisual()
     {
         if (ColorStack.Count > 0)
         {
             spriteRenderer.color = ColorStack.Peek().ToUnityColor();
         }
-        // else
-        // {
-        //     gameObject.SetActive(false); // ya da spriteRenderer.color = Color.black;
-        // }
+        else
+        {
+            // No colors left, destroy this tile object
+            GridManager.Instance.CleanupDestroyedTiles();
+            Destroy(gameObject);
+        }
     }
+
 
     public void SetHighlight(bool on)
     {

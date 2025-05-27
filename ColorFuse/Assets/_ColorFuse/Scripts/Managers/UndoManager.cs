@@ -6,21 +6,12 @@ public interface IUndoAction
     void Undo();
 }
 
-public class UndoManager : MonoBehaviour
+public class UndoManager : Singleton<UndoManager>
 {
-    public static UndoManager Instance { get; private set; }
-
     private Stack<IUndoAction> undoStack = new Stack<IUndoAction>();
     private const int maxUndoCount = 3;
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
-
+    
     public void RecordAction(IUndoAction action)
     {
         if (undoStack.Count >= maxUndoCount)
