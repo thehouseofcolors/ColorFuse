@@ -1,0 +1,117 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+
+// Her tile objeye ekle
+[RequireComponent(typeof(SpriteRenderer))]
+public class Tile : MonoBehaviour
+{
+
+    #if UNITY_EDITOR
+    [SerializeField, Tooltip("Only for debug view")]
+    private List<ColorVector> debugColorList = new List<ColorVector>();
+    #endif
+
+    public void UpdateDebugList()
+    {
+    #if UNITY_EDITOR
+        debugColorList = ColorStack.ToList();
+    #endif
+    }
+
+    public Stack<ColorVector> ColorStack { get; private set; } = new Stack<ColorVector>();
+
+    public bool HasColors => ColorStack.Count > 0;
+    public bool IsSelectable;
+
+    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    public int X { get; private set; }
+    public int Y { get; private set; }
+
+    private void Awake()
+    {
+        // SpriteRenderer atandı mı? Eğer SerializeField boşsa, otomatik bağla
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                Debug.LogError("[Tile] SpriteRenderer missing on GameObject: " + gameObject.name);
+            }
+        }
+    }
+
+    private void OnMouseDown()
+    {
+        if (!enabled || !IsSelectable) return;
+
+        EventBus.Publish(new TileEvents.TileSelectedEvent(this));
+    }
+
+    public void SetCoordinates(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    public ColorVector PopTopColor()
+    {
+        if (ColorStack.Count == 0)
+        {
+            Debug.LogWarning("[Tile] Attempted to pop color from empty stack on tile: " + name);
+            return new ColorVector(0, 0, 0); // ya da ColorVector.Invalid
+        }
+
+        var color = ColorStack.Pop();
+        UpdateVisual();
+        return color;
+    }
+
+    public void PushColor(ColorVector color)
+    {
+        if (!color.IsValidColor)  // İsteğe bağlı bir kontrol
+        {
+            Debug.LogWarning("[Tile] Trying to push invalid color on tile: " + name);
+        }
+
+        ColorStack.Push(color);
+        UpdateVisual();
+        UpdateDebugList();
+    }
+
+    public ColorVector PeekColor()
+    {
+        return ColorStack.Count > 0 ? ColorStack.Peek() : new ColorVector(0, 0, 0); // İstersen buraya da IsValid olmayan bir default üret
+    }
+
+    public void UpdateVisual()
+    {
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("[Tile] SpriteRenderer is null when updating visuals.");
+            return;
+        }
+
+        if (HasColors)
+        {
+            spriteRenderer.color = ColorStack.Peek().ToUnityColor();
+        }
+        else
+        {
+            spriteRenderer.color = new Color(0, 0, 0, 0); // Şeffaf
+        }
+
+        SetSelectableStatus(HasColors);
+    }
+
+    public void SetSelectableStatus(bool isSelectable)
+    {
+        IsSelectable = isSelectable;
+    }
+
+    public void SetHighlight(bool on)
+    {
+        transform.localScale = on ? Vector3.one * 1.2f : Vector3.one;
+    }
+}
