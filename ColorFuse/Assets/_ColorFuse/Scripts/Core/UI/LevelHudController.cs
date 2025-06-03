@@ -10,7 +10,7 @@ public class LevelHUDController : MonoBehaviour, IGameSystem
     [SerializeField] private Button undoButton;
     [SerializeField] Button menüButton;
     [SerializeField] Button settingsButton;
-    [SerializeField] private TextMeshProUGUI levelNumberText;
+    [SerializeField] private TextMeshProUGUI levelNumberText; 
 
     private void OnEnable()
     {

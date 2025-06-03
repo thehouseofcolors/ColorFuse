@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public static class TileColorDistributor
 {
     public static List<ColorVector> GenerateColors(int whiteComboCount)

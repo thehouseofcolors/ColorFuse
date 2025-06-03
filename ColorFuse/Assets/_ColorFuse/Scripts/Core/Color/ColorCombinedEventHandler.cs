@@ -41,7 +41,7 @@ public class ColorCombineHandler : MonoBehaviour, IGameSystem
             return;
         }
     }
-    void OnWhiteCombine(TileEvents.WhiteColorFormedEvent e)
+    public void OnWhiteCombine(TileEvents.WhiteColorFormedEvent e)
     {
         e.TargetTile.PopTopColor();
         Debug.Log("white collected");
