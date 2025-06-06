@@ -20,27 +20,30 @@ MonoBehaviour:
   - gridConfig:
       rows: 2
       columns: 2
-      WhiteComboCount: 5
+      WhiteComboCount: 3
     time: 0
     level: 1
     shuffleCount: 3
+    isRestarted: 0
     isLocked: 0
   - gridConfig:
       rows: 2
       columns: 2
-      WhiteComboCount: 0
+      WhiteComboCount: 5
     time: 0
     level: 2
     shuffleCount: 0
-    isLocked: 1
+    isRestarted: 0
+    isLocked: 0
   - gridConfig:
-      rows: 2
+      rows: 3
       columns: 2
-      WhiteComboCount: 0
+      WhiteComboCount: 4
     time: 0
     level: 3
     shuffleCount: 0
-    isLocked: 1
+    isRestarted: 0
+    isLocked: 0
   - gridConfig:
       rows: 2
       columns: 2
@@ -48,6 +51,7 @@ MonoBehaviour:
     time: 0
     level: 4
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 2
@@ -56,6 +60,7 @@ MonoBehaviour:
     time: 0
     level: 5
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 5
@@ -64,6 +69,7 @@ MonoBehaviour:
     time: 0
     level: 6
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 0
   - gridConfig:
       rows: 5
@@ -72,6 +78,7 @@ MonoBehaviour:
     time: 0
     level: 7
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 5
@@ -80,6 +87,7 @@ MonoBehaviour:
     time: 0
     level: 8
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 5
@@ -88,6 +96,7 @@ MonoBehaviour:
     time: 0
     level: 9
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 6
@@ -96,6 +105,7 @@ MonoBehaviour:
     time: 0
     level: 10
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 6
@@ -104,6 +114,7 @@ MonoBehaviour:
     time: 0
     level: 11
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 6
@@ -112,6 +123,7 @@ MonoBehaviour:
     time: 0
     level: 12
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 6
@@ -120,6 +132,7 @@ MonoBehaviour:
     time: 0
     level: 13
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 6
@@ -128,6 +141,7 @@ MonoBehaviour:
     time: 0
     level: 14
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
   - gridConfig:
       rows: 6
@@ -136,4 +150,5 @@ MonoBehaviour:
     time: 0
     level: 15
     shuffleCount: 0
+    isRestarted: 0
     isLocked: 1
