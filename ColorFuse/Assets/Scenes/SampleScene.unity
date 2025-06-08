@@ -131,6 +131,8 @@ GameObject:
   - component: {fileID: 8174249}
   - component: {fileID: 8174248}
   - component: {fileID: 8174247}
+  - component: {fileID: 8174252}
+  - component: {fileID: 8174251}
   m_Layer: 5
   m_Name: LevelHUDPanel
   m_TagString: Untagged
@@ -225,6 +227,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &8174251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8174246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32534f31a6e1f446adfaf9e59fc5d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 8174252}
+  fadeDuration: 0.3
+--- !u!225 &8174252
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8174246}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &51264211
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,6 +265,8 @@ GameObject:
   - component: {fileID: 51264214}
   - component: {fileID: 51264213}
   - component: {fileID: 51264212}
+  - component: {fileID: 51264217}
+  - component: {fileID: 51264216}
   m_Layer: 5
   m_Name: "LevelMen\xFCPanel"
   m_TagString: Untagged
@@ -329,6 +359,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &51264216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51264211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32534f31a6e1f446adfaf9e59fc5d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 51264217}
+  fadeDuration: 0.3
+--- !u!225 &51264217
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51264211}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &310567005
 GameObject:
   m_ObjectHideFlags: 0
@@ -2398,6 +2454,8 @@ GameObject:
   - component: {fileID: 986312322}
   - component: {fileID: 986312321}
   - component: {fileID: 986312320}
+  - component: {fileID: 986312325}
+  - component: {fileID: 986312324}
   m_Layer: 5
   m_Name: Fail;Panel
   m_TagString: Untagged
@@ -2490,6 +2548,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &986312324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986312319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32534f31a6e1f446adfaf9e59fc5d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 986312325}
+  fadeDuration: 0.3
+--- !u!225 &986312325
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986312319}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1116467912
 GameObject:
   m_ObjectHideFlags: 0
@@ -2771,6 +2855,8 @@ GameObject:
   - component: {fileID: 1218023734}
   - component: {fileID: 1218023733}
   - component: {fileID: 1218023732}
+  - component: {fileID: 1218023737}
+  - component: {fileID: 1218023736}
   m_Layer: 5
   m_Name: WinPanel
   m_TagString: Untagged
@@ -2863,6 +2949,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1218023736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218023731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32534f31a6e1f446adfaf9e59fc5d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 1218023737}
+  fadeDuration: 0.3
+--- !u!225 &1218023737
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218023731}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1272852708
 GameObject:
   m_ObjectHideFlags: 0

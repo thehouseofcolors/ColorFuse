@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ColorCombinationManager : MonoBehaviour, IGameSystem
@@ -6,6 +7,8 @@ public class ColorCombinationManager : MonoBehaviour, IGameSystem
     private Tile secondTile;
     private bool isFirstSelected = false;
     private bool isSecondSelected = false;
+    private bool isProcessing = false;
+
 
     public void Initialize()
     {
@@ -22,6 +25,12 @@ public class ColorCombinationManager : MonoBehaviour, IGameSystem
 
     public void OnSelectTile(TileEvents.TileSelectedEvent e)
     {
+        if (isProcessing)
+        {
+            Debug.LogWarning("[SelectionManager] İşlem devam ederken yeni seçim engellendi.");
+            return;
+        }
+
         if (e.SelectedTile == null)
         {
             Debug.LogWarning("[SelectionManager] Received null TileSelectedEvent or SelectedTile.");
@@ -51,14 +60,22 @@ public class ColorCombinationManager : MonoBehaviour, IGameSystem
             TryCombineTiles(firstTile, secondTile);
         }
     }
-
     private void TryCombineTiles(Tile a, Tile b)
     {
+        StartCoroutine(TryCombineCoroutine(a, b));
+    }
+    private IEnumerator TryCombineCoroutine(Tile a, Tile b)
+    {
+        isProcessing = true;
+
+        yield return new WaitForSeconds(0.15f); // animasyon ya da efekt süresi gibi
+
         if (a == null || b == null)
         {
             Debug.LogError("[SelectionManager] TryCombineTiles: Tile'lar null!");
             ClearSelection();
-            return;
+            isProcessing = false;
+            yield break;
         }
 
         var colorA = a.PeekColor();
@@ -68,15 +85,46 @@ public class ColorCombinationManager : MonoBehaviour, IGameSystem
         {
             Debug.LogWarning("[SelectionManager] Tile'larda renk yok. Birleşme iptal.");
             ClearSelection();
-            return;
+            isProcessing = false;
+            yield break;
         }
 
         var combinedColor = ColorManager.CombineColors(colorA, colorB);
 
         EventBus.Publish(new ColorEvents.TryColorCombinedEvent(a, b, combinedColor));
 
+        yield return new WaitForSeconds(0.25f); // efekt sonrası bekleme
+
         ClearSelection();
+        isProcessing = false;
     }
+
+
+    // private void TryCombineTiles(Tile a, Tile b)
+    // {
+    //     if (a == null || b == null)
+    //     {
+    //         Debug.LogError("[SelectionManager] TryCombineTiles: Tile'lar null!");
+    //         ClearSelection();
+    //         return;
+    //     }
+
+    //     var colorA = a.PeekColor();
+    //     var colorB = b.PeekColor();
+
+    //     if (colorA.Equals(new ColorVector(0, 0, 0)) || colorB.Equals(new ColorVector(0, 0, 0)))
+    //     {
+    //         Debug.LogWarning("[SelectionManager] Tile'larda renk yok. Birleşme iptal.");
+    //         ClearSelection();
+    //         return;
+    //     }
+
+    //     var combinedColor = ColorManager.CombineColors(colorA, colorB);
+
+    //     EventBus.Publish(new ColorEvents.TryColorCombinedEvent(a, b, combinedColor));
+
+    //     ClearSelection();
+    // }
 
     private void ClearSelection()
     {

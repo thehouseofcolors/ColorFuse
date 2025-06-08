@@ -21,7 +21,16 @@ public static class TileEvents
         }
     }
 
+    public struct TileRelasedEvent : IGameEvent
+    {
+        public Tile RelasedTile;
 
+        public TileRelasedEvent(Tile tile)
+        {
+            RelasedTile = tile;
+        }
+
+    }
 
 
 

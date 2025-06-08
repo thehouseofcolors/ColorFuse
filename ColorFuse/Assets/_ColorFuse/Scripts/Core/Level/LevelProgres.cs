@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,14 +21,29 @@ public class LevelProgressChecker
 
         CompleteLevel();
     }
-
     private void CompleteLevel()
     {
+        GridManager gridManager = GameObject.FindFirstObjectByType<GridManager>();
+        if (gridManager != null)
+        {
+            gridManager.StartCoroutine(CompleteLevelRoutine(gridManager));
+        }
+        else
+        {
+            Debug.LogError("[LevelProgressChecker] GridManager bulunamadı!");
+        }
+    }
+
+    private IEnumerator CompleteLevelRoutine(GridManager gridManager)
+    {
+        yield return gridManager.StartCoroutine(gridManager.ClearGridAnimated());
+
         int currentLevel = PlayerPrefs.GetInt(Constants.CurrentLevelKey);
         float time = PlayerPrefs.GetFloat(Constants.PlayStartTimeKey) - Time.time;
         bool isSuccess = true;
 
-        Debug.Log("[LevelProgressChecker] Tüm tile'lar boş. Seviye tamamlandı.");
+        Debug.Log("[LevelProgressChecker] Seviye başarıyla tamamlandı.");
         EventBus.Publish(new LevelEvents.LevelCompletedEvent(currentLevel, time, isSuccess));
     }
+
 }

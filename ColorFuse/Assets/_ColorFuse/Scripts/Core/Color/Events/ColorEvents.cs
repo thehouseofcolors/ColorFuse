@@ -31,7 +31,7 @@ public static class ColorEvents
         public WhiteColorFormedEvent(Tile tile) => WhiteTile = tile;
     }
 
-
+    public struct InvalidCombinationEvent : IGameEvent {}
 
 
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 // Her tile objeye ekle
 [RequireComponent(typeof(SpriteRenderer))]
@@ -121,9 +122,50 @@ public class Tile : MonoBehaviour
         transform.localScale = on ? Vector3.one * 1.2f : Vector3.one;
     }
 
-    public void ClearTile()
+    public IEnumerator PlayDestroyAnimation(float delay = 0.25f)
     {
-        Destroy(this);
+        // Örnek: shrink veya fade animasyonu
+        Vector3 startScale = transform.localScale;
+        Vector3 endScale = Vector3.zero;
+        float duration = delay;
+        float time = 0f;
 
+        while (time < duration)
+        {
+            transform.localScale = Vector3.Lerp(startScale, endScale, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localScale = endScale;
+        Destroy(gameObject);
     }
+    public IEnumerator PlayClearColorAnimation(float delay = 0.25f)
+    {
+        Vector3 startScale = transform.localScale;
+        Vector3 endScale = startScale * 0.5f;
+        float duration = delay;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            transform.localScale = Vector3.Lerp(startScale, endScale, time / duration);
+            spriteRenderer.color = Color.Lerp(spriteRenderer.color, new Color(0, 0, 0, 0), time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localScale = startScale;
+        spriteRenderer.color = new Color(0, 0, 0, 0);
+        ClearAllColors();
+    }
+    public void ClearAllColors()
+    {
+        ColorStack.Clear();
+        UpdateDebugList();
+        UpdateVisual(); // Şeffaf hâle getirecek
+    }
+
+
+
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,20 @@ public class PanelManager : MonoBehaviour, IGameSystem
     public GameObject levelHUDPanel;
     public GameObject winPanel;
     public GameObject failPanel;
+
+    private UIAnimator mainAnimator;
+    private UIAnimator hudAnimator;
+    private UIAnimator winAnimator;
+    private UIAnimator failAnimator;
+
+    private void Awake()
+    {
+        mainAnimator = mainMenuPanel.GetComponent<UIAnimator>();
+        hudAnimator = levelHUDPanel.GetComponent<UIAnimator>();
+        winAnimator = winPanel.GetComponent<UIAnimator>();
+        failAnimator = failPanel.GetComponent<UIAnimator>();
+    }
+
 
     void Start()
     {
@@ -59,16 +74,55 @@ public class PanelManager : MonoBehaviour, IGameSystem
         SetActivePanel(mainMenuPanel);
     }
 
-    private void SetActivePanel(GameObject activePanel)
+    // private void SetActivePanel(GameObject activePanel)
+    // {
+    //     Debug.Log("[PanelManager] Switching active panel to: " + (activePanel != null ? activePanel.name : "NULL"));
+
+    //     mainMenuPanel?.SetActive(false);
+    //     levelHUDPanel?.SetActive(false);
+    //     winPanel?.SetActive(false);
+    //     failPanel?.SetActive(false);
+
+    //     if (activePanel != null)
+    //         activePanel.SetActive(true);
+    // }
+    private Coroutine transitionCoroutine;
+
+    private void SetActivePanel(GameObject targetPanel)
     {
-        Debug.Log("[PanelManager] Switching active panel to: " + (activePanel != null ? activePanel.name : "NULL"));
+        if (transitionCoroutine != null)
+            StopCoroutine(transitionCoroutine);
 
-        mainMenuPanel?.SetActive(false);
-        levelHUDPanel?.SetActive(false);
-        winPanel?.SetActive(false);
-        failPanel?.SetActive(false);
-
-        if (activePanel != null)
-            activePanel.SetActive(true);
+        transitionCoroutine = StartCoroutine(SwitchPanelRoutine(targetPanel));
     }
+
+    private IEnumerator SwitchPanelRoutine(GameObject targetPanel)
+    {
+        var animators = new[]
+        {
+            (mainMenuPanel, mainAnimator),
+            (levelHUDPanel, hudAnimator),
+            (winPanel, winAnimator),
+            (failPanel, failAnimator)
+        };
+
+        foreach (var (panel, animator) in animators)
+        {
+            if (panel.activeSelf && panel != targetPanel)
+            {
+                yield return animator.FadeOut();
+                panel.SetActive(false);
+            }
+        }
+
+        if (targetPanel != null)
+        {
+            targetPanel.SetActive(true);
+
+            var animator = targetPanel.GetComponent<UIAnimator>();
+            if (animator != null)
+                yield return animator.FadeIn();
+        }
+    }
+
 }

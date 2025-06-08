@@ -26,10 +26,18 @@ public class ColorCombineHandler : MonoBehaviour, IGameSystem
             Debug.LogError("ColorCombinedEvent contains null tiles!");
             return;
         }
-
         Debug.Log($"ColorCombineHandler: Combining color at {e.SourceTile.name} → {e.TargetTile.name}, result: {e.Result}");
-        if (!e.Result.IsValidColor) return;
-        
+        if (!e.Result.IsValidColor)
+        {
+            Debug.Log("invalid combinedColor");
+            return;
+        }
+
+        if (ColorVector.IsTheSame(e.SourceTile.PeekColor(), e.TargetTile.PeekColor()))
+        {
+            EventBus.Publish(new ColorEvents.InvalidCombinationEvent());
+            return;
+        }
         // Üst renkler her durumda çıkarılıyor
         e.SourceTile.PopTopColor();
         e.TargetTile.PopTopColor();
@@ -48,7 +56,7 @@ public class ColorCombineHandler : MonoBehaviour, IGameSystem
     }
     void OnWhiteCombine(ColorEvents.WhiteColorFormedEvent e)
     {
-        
+
         Debug.Log("white collected");
 
     }
@@ -56,5 +64,8 @@ public class ColorCombineHandler : MonoBehaviour, IGameSystem
     {
         e.MixColorTile.PushColor(e.Result);
     }
-    
+    void OnInvalidCombine(ColorEvents.InvalidCombinationEvent e)
+    {
+        
+    }
 }

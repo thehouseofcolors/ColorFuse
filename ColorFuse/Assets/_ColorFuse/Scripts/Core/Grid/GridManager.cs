@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -131,13 +132,24 @@ public class GridManager : MonoBehaviour, IGameSystem
     {
         if (!levelDatabase.TryGetGridConfig(level, out var gridConfig)) return;
 
-        ClearGrid();
-        allTiles = GridBuilder.GenerateGrid(gridParent, tilePrefab, spacing, gridConfig.columns, gridConfig.rows);
-        Stack<ColorVector> allColors = ColorManager.GenerateColors(gridConfig.WhiteComboCount);
+        // Eğer grid zaten kuruluysa yeniden kurma
+        if (allTiles.Count == gridConfig.columns * gridConfig.rows)
+        {
+            Stack<ColorVector> newColors = ColorManager.GenerateColors(gridConfig.WhiteComboCount);
+            TileColorDistributor.DistributeColors(allTiles, newColors);
+        }
+        else
+        {
+            // Eski davranış: yeniden kur
+            ClearGrid(); // Hâlâ Destroy ediyor
+            allTiles = GridBuilder.GenerateGrid(gridParent, tilePrefab, spacing, gridConfig.columns, gridConfig.rows);
+            Stack<ColorVector> allColors = ColorManager.GenerateColors(gridConfig.WhiteComboCount);
+            TileColorDistributor.DistributeColors(allTiles, allColors);
+        }
 
-        TileColorDistributor.DistributeColors(allTiles, allColors);
         levelProgressChecker = new LevelProgressChecker(allTiles);
     }
+
     public void ClearGrid()
     {
         foreach (var tile in allTiles)
@@ -145,4 +157,15 @@ public class GridManager : MonoBehaviour, IGameSystem
             Destroy(tile.gameObject);
         }
     }
+    public IEnumerator ClearGridAnimated()
+    {
+        foreach (var tile in allTiles)
+        {
+            if (tile != null)
+                yield return StartCoroutine(tile.PlayClearColorAnimation(0.2f));
+        }
+
+        Debug.Log("[GridManager] Tüm tile içerikleri temizlendi (objeler kaldı).");
+    }
+
 }

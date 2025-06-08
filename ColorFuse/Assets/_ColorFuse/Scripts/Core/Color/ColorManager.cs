@@ -43,6 +43,10 @@ public struct ColorVector
     {
         return new ColorVector(a.R + b.R, a.G + b.G, a.B + b.B);
     }
+    public static bool IsTheSame(ColorVector a, ColorVector b)
+    {
+        return a.R == b.R && a.B == b.B && a.G == b.G;
+    }
 
     public Color ToUnityColor()
     {
