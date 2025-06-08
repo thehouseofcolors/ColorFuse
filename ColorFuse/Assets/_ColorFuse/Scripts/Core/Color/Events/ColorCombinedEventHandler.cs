@@ -8,6 +8,7 @@ public class ColorCombineHandler : MonoBehaviour, IGameSystem
         EventBus.Subscribe<ColorEvents.TryColorCombinedEvent>(OnColorCombined);
         EventBus.Subscribe<ColorEvents.MixColorFormedEvent>(OnMixColorCombine);
         EventBus.Subscribe<ColorEvents.WhiteColorFormedEvent>(OnWhiteCombine);
+        EventBus.Subscribe<ColorEvents.InvalidCombinationEvent>(OnInvalidCombine);
     }
 
     public void Shutdown()
@@ -16,6 +17,8 @@ public class ColorCombineHandler : MonoBehaviour, IGameSystem
         EventBus.Unsubscribe<ColorEvents.TryColorCombinedEvent>(OnColorCombined);
         EventBus.Unsubscribe<ColorEvents.MixColorFormedEvent>(OnMixColorCombine);
         EventBus.Unsubscribe<ColorEvents.WhiteColorFormedEvent>(OnWhiteCombine);
+        
+        EventBus.Subscribe<ColorEvents.InvalidCombinationEvent>(OnInvalidCombine);
     }
 
     void OnColorCombined(ColorEvents.TryColorCombinedEvent e)
@@ -54,18 +57,21 @@ public class ColorCombineHandler : MonoBehaviour, IGameSystem
             EventBus.Publish(new ColorEvents.MixColorFormedEvent(e.TargetTile, e.Result));
         }
     }
+
+
     void OnWhiteCombine(ColorEvents.WhiteColorFormedEvent e)
     {
-
+        EventBus.Publish(new TileEvents.WhiteTileCollectedEvent());
         Debug.Log("white collected");
 
     }
     void OnMixColorCombine(ColorEvents.MixColorFormedEvent e)
     {
+        EventBus.Publish(new TileEvents.TileCombinedEvent(e.MixColorTile, e.Result));
         e.MixColorTile.PushColor(e.Result);
     }
     void OnInvalidCombine(ColorEvents.InvalidCombinationEvent e)
     {
-        
+        EventBus.Publish(new TileEvents.TileRelasedEvent());
     }
 }

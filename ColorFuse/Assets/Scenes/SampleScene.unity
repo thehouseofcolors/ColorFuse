@@ -527,6 +527,8 @@ GameObject:
   - component: {fileID: 360279835}
   - component: {fileID: 360279834}
   - component: {fileID: 360279836}
+  - component: {fileID: 360279837}
+  - component: {fileID: 360279838}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -716,6 +718,34 @@ MonoBehaviour:
   "men\xFCButton": {fileID: 310567007}
   settingsButton: {fileID: 950472126}
   levelNumberText: {fileID: 514083771}
+--- !u!114 &360279837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360279820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36364a725bd32684b9a77cb99bf15007, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  successEffectPrefab: {fileID: 1069381618936421164, guid: 61403a09f33e35848b583347e3f2309b, type: 3}
+  failEffectPrefab: {fileID: 656639709532293164, guid: 2aa949766779d6d408eef8ce4f1f6c90, type: 3}
+--- !u!114 &360279838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360279820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a06b38c530f3c2c4ba2cdca4a8e24683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notificationText: {fileID: 514083771}
+  displayDuration: 1.2
 --- !u!1 &381564552
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,6 +1163,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1258,6 +1289,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e91214b805405498a4a3c21e975683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 0}
+  shakeDuration: 0.2
+  shakeMagnitude: 0.1
 --- !u!1 &567653299
 GameObject:
   m_ObjectHideFlags: 0

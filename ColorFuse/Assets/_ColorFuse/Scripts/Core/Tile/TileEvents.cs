@@ -13,26 +13,36 @@ public static class TileEvents
 
     public struct TileEmptiedEvent : IGameEvent
     {
-        public Tile SelectedTile;
+        public Tile EmptiedTile;
 
         public TileEmptiedEvent(Tile tile)
         {
-            SelectedTile = tile;
+            EmptiedTile = tile;
         }
     }
 
     public struct TileRelasedEvent : IGameEvent
     {
-        public Tile RelasedTile;
+        // public Tile RelasedTile;
 
-        public TileRelasedEvent(Tile tile)
+        // public TileRelasedEvent(Tile tile)
+        // {
+        //     RelasedTile = tile;
+        // }
+
+    }
+
+    public struct TileCombinedEvent : IGameEvent
+    {
+        public Tile CombinedTile;
+        public ColorVector CombinedColor;
+        public TileCombinedEvent(Tile tile, ColorVector colorVector)
         {
-            RelasedTile = tile;
+            CombinedTile = tile;
+            CombinedColor = colorVector;
         }
 
     }
 
-
-
-    
+    public struct WhiteTileCollectedEvent : IGameEvent {}
 }
