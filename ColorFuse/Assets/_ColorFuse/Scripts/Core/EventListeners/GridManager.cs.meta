@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 0efcd75756b6e2d4a8d88f76c4ff4c7a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - levelDatabase: {fileID: 11400000, guid: b646ec92d106db24d893a6c272e3939e, type: 2}
+  - tilePrefab: {fileID: 6837341202936163830, guid: d1c77e79d401e6e4c90d9c8780538da6, type: 3}
+  executionOrder: 400
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
