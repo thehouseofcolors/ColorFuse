@@ -8,10 +8,7 @@ using UIEvents;
 public class LevelHUDController : Singleton<LevelHUDController>, IGameSystem
 {
     [Header("UI References")]
-    [SerializeField] private Button shuffleButton;
-    [SerializeField] private Button undoButton;
     [SerializeField] private Button menuButton;
-    [SerializeField] private Button settingsButton;
     [SerializeField] private TextMeshProUGUI levelNumberText;
     [SerializeField] private GameObject loadingIndicator;
 
@@ -22,12 +19,8 @@ public class LevelHUDController : Singleton<LevelHUDController>, IGameSystem
 
     public void Initialize()
     {
-        ValidateReferences();
         
         menuButton.onClick.AddListener(OnMenuPressedAsyncWrapper);
-        settingsButton.onClick.AddListener(OnSettingsPressed);
-        shuffleButton.onClick.AddListener(OnShufflePressed);
-        undoButton.onClick.AddListener(OnUndoPressed);
 
         UpdateLevelNumber();
         SetLoadingState(false);
@@ -36,17 +29,8 @@ public class LevelHUDController : Singleton<LevelHUDController>, IGameSystem
     public void Shutdown()
     {
         menuButton.onClick.RemoveListener(OnMenuPressedAsyncWrapper);
-        settingsButton.onClick.RemoveListener(OnSettingsPressed);
-        shuffleButton.onClick.RemoveListener(OnShufflePressed);
-        undoButton.onClick.RemoveListener(OnUndoPressed);
     }
 
-    private void ValidateReferences()
-    {
-        Debug.Assert(menuButton != null, "Menu button reference is missing!", this);
-        Debug.Assert(levelNumberText != null, "Level number text reference is missing!", this);
-        // Add other assertions as needed
-    }
 
     private void UpdateLevelNumber()
     {
@@ -59,9 +43,6 @@ public class LevelHUDController : Singleton<LevelHUDController>, IGameSystem
         _isInteractable = state;
         
         menuButton.interactable = state;
-        settingsButton.interactable = state;
-        shuffleButton.interactable = state;
-        undoButton.interactable = state;
     }
 
     public void SetLoadingState(bool isLoading)
@@ -98,21 +79,4 @@ public class LevelHUDController : Singleton<LevelHUDController>, IGameSystem
         }
     }
 
-    private void OnSettingsPressed()
-    {
-        if (!_isInteractable) return;
-        // Implement settings logic
-    }
-
-    private void OnShufflePressed()
-    {
-        if (!_isInteractable) return;
-        // Implement shuffle logic
-    }
-
-    private void OnUndoPressed()
-    {
-        if (!_isInteractable) return;
-        // Implement undo logic
-    }
 }
