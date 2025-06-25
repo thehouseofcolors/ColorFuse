@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7393988966467864938}
   - component: {fileID: 2375031936028683548}
   - component: {fileID: 6373629834886909778}
-  - component: {fileID: 5651826145524206263}
   - component: {fileID: 928378810001858237}
+  - component: {fileID: 4480801526767373810}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &6373629834886909778
@@ -136,20 +136,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5651826145524206263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5236129064122025401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a644832b9df5e76409b35ed1850f88d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 2375031936028683548}
-  transferEffectPrefab: {fileID: 602129796837062012, guid: b379142fd67302d44998042b29b9a4ac, type: 3}
 --- !u!111 &928378810001858237
 Animation:
   m_ObjectHideFlags: 0
@@ -166,3 +152,19 @@ Animation:
   m_AnimatePhysics: 0
   m_UpdateMode: 0
   m_CullingType: 0
+--- !u!114 &4480801526767373810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5236129064122025401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a644832b9df5e76409b35ed1850f88d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 2375031936028683548}
+  transferEffectPrefab: {fileID: 602129796837062012, guid: b379142fd67302d44998042b29b9a4ac, type: 3}
+  transferDuration: 0.35
+  maxTransferDistance: 2

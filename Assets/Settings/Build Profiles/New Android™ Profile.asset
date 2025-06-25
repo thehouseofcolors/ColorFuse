@@ -854,7 +854,7 @@ MonoBehaviour:
     - line: '|   qnxGraphicConfPath: '
     - line: '|   apiCompatibilityLevel: 6'
     - line: '|   captureStartupLogs: {}'
-    - line: '|   activeInputHandler: 0'
+    - line: '|   activeInputHandler: 1'
     - line: '|   windowsGamepadBackendHint: 0'
     - line: '|   cloudProjectId: bdf2ad82-f46a-4ad0-a7e8-8f13e4ae1832'
     - line: '|   framebufferDepthMemorylessMode: 0'
@@ -892,7 +892,7 @@ MonoBehaviour:
         m_ExportAsGoogleAndroidProject: 0
         m_DebugSymbolLevel: 2
         m_DebugSymbolFormat: 5
-        m_CurrentDeploymentTargetId: 5f53b073
+        m_CurrentDeploymentTargetId: __builtin__target_default
         m_BuildType: 1
         m_BuildAppBundle: 0
         m_IPAddressToConnect: 

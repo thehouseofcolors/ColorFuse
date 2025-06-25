@@ -1,0 +1,45 @@
+{
+    "name": "GameInput",
+    "maps": [
+        {
+            "name": "New action map",
+            "id": "92f8b0a2-9a28-4886-976e-4e44efc85db3",
+            "actions": [
+                {
+                    "name": "TileClick",
+                    "type": "Value",
+                    "id": "86b7e3c1-540c-427e-a963-2f18dc5229ed",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0e459428-344a-4931-af3a-6aecb2189101",
+                    "path": "<Pointer>/position",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TileClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3c1bbb0a-20e3-4c8b-8512-921b929546c5",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TileClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
